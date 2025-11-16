@@ -1,10 +1,11 @@
 import {fetchBaseQuery} from "@reduxjs/toolkit/query";
-import {createApi, } from "@reduxjs/toolkit/query/react";
+import {createApi} from "@reduxjs/toolkit/query/react";
 import type {ITodo} from "@/app/types.ts";
 
 export const todoApi = createApi({
     reducerPath: "todoApi",
     baseQuery: fetchBaseQuery({baseUrl: "https://69191be79ccba073ee922d51.mockapi.io/api/"}),
+    tagTypes: ["Todo"],
     endpoints: (build) => ({
         getTodoById: build.query<ITodo, number>({
             query: (id: number) => ({
@@ -16,6 +17,7 @@ export const todoApi = createApi({
                 url: `todos/${id}`,
                 method: "DELETE",
             }),
+            invalidatesTags: ["Todo"],
         }),
         updateTodoById: build.mutation<ITodo, { id: number; body: Partial<ITodo> }>({
             query: ({ id, body }) => ({
@@ -23,6 +25,7 @@ export const todoApi = createApi({
                 method: "PUT",
                 body,
             }),
+            invalidatesTags: ["Todo"],
         }),
         createTodo: build.mutation<ITodo, Partial<ITodo>>({
             query: (body) => ({
@@ -30,19 +33,23 @@ export const todoApi = createApi({
                 method: "POST",
                 body,
             }),
+            invalidatesTags: ["Todo"],
         }),
         getTodosPage: build.query<ITodo[], {page: number, limit: number}>({
             query: ({page, limit}) => ({
                 url: "todos",
                 params: {limit, page}
             }),
+            providesTags: ["Todo"],
         }),
         getAllTodos: build.query<ITodo[], void>({
-           query: () => "todos",
+            query: () => "todos",
+            providesTags: ["Todo"],
         }),
     }),
 })
 
-export default {
-
-}
+export const {
+    useGetAllTodosQuery,
+    useGetTodosPageQuery,
+} = todoApi;
