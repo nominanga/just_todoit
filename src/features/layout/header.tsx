@@ -1,0 +1,80 @@
+import {NavLink} from "react-router-dom"
+import { useState } from 'react'
+import { Menu, X } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+
+const navigation = [
+    { name: 'Todos', href: '/' },
+    { name: 'Create', href: '/about' },
+]
+
+export function Header() {
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+    return (
+        <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            <nav className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8">
+                <div className="flex lg:flex-1">
+                    <NavLink to="/" className="-m-1.5 p-1.5">
+                        <span className="sr-only">matvei</span>
+                        <div className="flex items-center gap-2">
+                            <div className="h-8 w-8 rounded-lg bg-primary" />
+                            <span className="text-xl font-semibold">Just TodoIt</span>
+                        </div>
+                    </NavLink>
+                </div>
+
+                <div className="flex lg:hidden">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                        aria-label="Toggle menu"
+                    >
+                        {mobileMenuOpen ? (
+                            <X className="h-6 w-6" />
+                        ) : (
+                            <Menu className="h-6 w-6" />
+                        )}
+                    </Button>
+                </div>
+
+                <div className="hidden lg:flex lg:gap-x-8">
+                    {navigation.map((item) => (
+                        <NavLink
+                            key={item.name}
+                            to={item.href}
+                            className="text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
+                        >
+                            {item.name}
+                        </NavLink>
+                    ))}
+                </div>
+
+                <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+                    <Button>Get Started</Button>
+                </div>
+            </nav>
+
+            {mobileMenuOpen && (
+                <div className="lg:hidden">
+                    <div className="space-y-1 border-t border-border px-4 pb-3 pt-2">
+                        {navigation.map((item) => (
+                            <NavLink
+                                key={item.name}
+                                to={item.href}
+                                className="block rounded-md px-3 py-2 text-base font-medium text-foreground/80 hover:bg-accent hover:text-foreground"
+                                onClick={() => setMobileMenuOpen(false)}
+                            >
+                                {item.name}
+                            </NavLink>
+                        ))}
+                        <div className="pt-2">
+                            <Button className="w-full">Get Started</Button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </header>
+    )
+}
