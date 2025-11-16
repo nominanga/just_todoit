@@ -1,18 +1,15 @@
-import './App.css'
-import {BrowserRouter, Route, Routes} from "react-router";
-import ExampleComponent from "./ExampleComponent.tsx";
-import OutletPage from "./OutletPage.tsx";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 function App() {
 
   return (
     <BrowserRouter>
         <Routes>
-            <Route element={<OutletPage/>}>
-                <Route index element={<ExampleComponent value={"index"}/>}/>
-                <Route path="todos/:id" element={<ExampleComponent value={"todo"}/>}/>
+            <Route element={null}>
+                <Route index element={null}/>
+                <Route path="todos/:id" element={null}/>
             </Route>
-            <Route path="login" element={<ExampleComponent value={"login"}/>}/>
+            <Route path="login" element={null}/>
             <Route path="*" element={null}/>
         </Routes>
     </BrowserRouter>
