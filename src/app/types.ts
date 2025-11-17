@@ -6,6 +6,7 @@ export interface ITodo {
     title: string;
     completed: boolean;
     description: string;
+    createdAt: number;
 }
 
 export interface PaginationReturn {
