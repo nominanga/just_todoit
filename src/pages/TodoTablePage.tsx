@@ -68,7 +68,7 @@ const TodoTablePage = () => {
                         </PaginationItem>
                     )}
                     {listAvailablePages().map((page) => (
-                        <PaginationItem>
+                        <PaginationItem key={page}>
                             <PaginationLink isActive={page === currentPage} action={() => goToPage(page)}>
                                 {page}
                             </PaginationLink>

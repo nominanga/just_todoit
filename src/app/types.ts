@@ -24,3 +24,12 @@ export interface PaginationReturn {
     hasPreviousPage: boolean;
     todos: ITodo[];
 }
+
+export interface AuthCredentials {
+    username: string;
+    password: string;
+}
+
+export interface AuthState {
+    isAuthenticated: boolean;
+}

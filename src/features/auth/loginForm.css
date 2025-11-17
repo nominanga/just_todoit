@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+.form-container {
+    @apply flex-1 flex justify-center items-center;
+}
+.login-form-card {
+    @apply rounded-lg max-w-sm;
+}

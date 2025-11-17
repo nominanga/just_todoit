@@ -4,6 +4,10 @@
     @apply h-full flex flex-col justify-between gap-5;
 }
 
+/*.main-content {*/
+/*    @apply h-dvh flex flex-col gap-5 align-middle justify-between lg:w-5xl m-auto;*/
+/*}*/
+
 .main-content {
-    @apply h-dvh flex flex-col gap-5 align-middle justify-between lg:w-5xl m-auto;
+    @apply h-dvh flex flex-col gap-5 align-middle lg:w-5xl m-auto;
 }

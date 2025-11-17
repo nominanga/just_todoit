@@ -1,15 +1,22 @@
-import {NavLink} from "react-router-dom"
+import {NavLink, useNavigate} from "react-router-dom"
 import { useState } from 'react'
-import { Menu, X } from 'lucide-react'
+import {CircleCheckBig, Menu, X} from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import {useActions} from "@/hooks/actions.ts";
+import {useAppSelector} from "@/hooks/reduxTypedHooks.ts";
 
 const navigation = [
     { name: 'Todos', href: '/' },
-    { name: 'Create', href: '/about' },
+    { name: 'Create', href: '/todos/create' },
+    { name: 'About', href: '/about'}
 ]
 
 export function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const navigate = useNavigate();
+
+    const {logout} = useActions();
+    const isAuth = useAppSelector(state => state.login.isAuthenticated);
 
     return (
         <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -18,7 +25,8 @@ export function Header() {
                     <NavLink to="/" className="-m-1.5 p-1.5">
                         <span className="sr-only">matvei</span>
                         <div className="flex items-center gap-2">
-                            <div className="h-8 w-8 rounded-lg bg-primary" />
+                            <CircleCheckBig className="h-8 w-8" strokeWidth={2.5}/>
+                            {/*<div className="h-8 w-8 rounded-lg bg-primary" />*/}
                             <span className="text-xl font-semibold">Just TodoIt</span>
                         </div>
                     </NavLink>
@@ -30,6 +38,7 @@ export function Header() {
                         size="icon"
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                         aria-label="Toggle menu"
+                        className="cursor-pointer"
                     >
                         {mobileMenuOpen ? (
                             <X className="h-6 w-6" />
@@ -52,13 +61,20 @@ export function Header() {
                 </div>
 
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                    <Button>Get Started</Button>
+                    {(isAuth) ?
+                        (<Button variant="outline" onClick={() => logout()} className="cursor-pointer">
+                            Sign out
+                        </Button>) :
+                        (<Button onClick={() => navigate("login")} className="cursor-pointer">
+                            Sign in
+                        </Button>)
+                    }
                 </div>
             </nav>
 
             {mobileMenuOpen && (
-                <div className="lg:hidden">
-                    <div className="space-y-1 border-t border-border px-4 pb-3 pt-2">
+                <div className="lg:hidden absolute left-0 right-0 top-full bg-background border-b border-border shadow-lg animate-in slide-in-from-top-2 duration-200">
+                    <div className="space-y-1 px-4 pb-3 pt-2">
                         {navigation.map((item) => (
                             <NavLink
                                 key={item.name}
@@ -70,7 +86,22 @@ export function Header() {
                             </NavLink>
                         ))}
                         <div className="pt-2">
-                            <Button className="w-full">Get Started</Button>
+                            {(isAuth) ?
+                                (<Button
+                                    variant="outline"
+                                    className="w-full cursor-pointer"
+                                    onClick={() => logout()}
+                                >
+                                    Sign out
+                                </Button>) :
+                                (<Button
+                                    className="w-full cursor-pointer"
+                                    onClick={() => navigate("login")}
+                                >
+                                    Sign in
+                                </Button>)
+                            }
+
                         </div>
                     </div>
                 </div>

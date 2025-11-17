@@ -1,6 +1,9 @@
+import LoginForm from "@/features/auth/LoginForm.tsx";
 
 const LoginPage = () => {
-    return <div>LoginPage</div>;
+    return <>
+        <LoginForm/>
+    </>;
 }
 
 export default LoginPage;
