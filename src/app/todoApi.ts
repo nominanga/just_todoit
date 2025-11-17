@@ -4,7 +4,7 @@ import type {ITodo} from "@/app/types.ts";
 
 export const todoApi = createApi({
     reducerPath: "todoApi",
-    baseQuery: fetchBaseQuery({baseUrl: "https://69191be79ccba073ee922d51.mockapi.io/api/"}),
+    baseQuery: fetchBaseQuery({baseUrl: "https://691a9bb52d8d7855756f66f9.mockapi.io/api//"}),
     tagTypes: ["Todo"],
     endpoints: (build) => ({
         getTodoById: build.query<ITodo, number>({

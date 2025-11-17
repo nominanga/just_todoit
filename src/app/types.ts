@@ -13,6 +13,7 @@ export interface PaginationReturn {
     totalPages: number;
     totalCount: number;
     isLoading: boolean;
+    isLoadingTotal: boolean;
     isError: boolean;
     isFetching: boolean;
     error: FetchBaseQueryError | SerializedError | undefined;

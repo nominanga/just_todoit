@@ -7,7 +7,6 @@ import {
     PaginationItem, PaginationLink, PaginationNext,
     PaginationPrevious
 } from "@/components/ui/pagination.tsx";
-import {useEffect, useState} from "react";
 
 
 const TodoTablePage = () => {
@@ -19,6 +18,7 @@ const TodoTablePage = () => {
         isError,
         isLoading,
         isFetching,
+        isLoadingTotal,
         totalPages,
         todos,
         goToPage,
@@ -27,13 +27,19 @@ const TodoTablePage = () => {
     }
         = useTodoPagination(1, 10);
 
-    const [pagesList, setPagesList] = useState<number[]>([...Array.from({length: totalPages}, (_, i) => i + 1)]);
 
-    const [availablePages, setAvailablePages] = useState<number[]>((pagesList.length < 3) ? pagesList : pagesList.slice(0, 3));
-
-    useEffect(() => {
-
-    }, [currentPage])
+    const listAvailablePages = () => {
+        if (totalPages < 3) {
+            return [...Array(totalPages).keys()].map(i => i + 1);
+        }
+        if (currentPage === 1) {
+            return [currentPage, currentPage + 1, currentPage + 2];
+        }
+        if (currentPage === totalPages) {
+            return [currentPage - 2, currentPage - 1, currentPage];
+        }
+        return [currentPage - 1, currentPage, currentPage + 1];
+    }
 
     return (
         <div className="flex flex-col items-center gap-4 h-full justify-between">
@@ -51,33 +57,33 @@ const TodoTablePage = () => {
             </div>
             <Pagination>
                 <PaginationContent>
-                    <PaginationItem>
-                        <PaginationPrevious action={() => goToPreviousPage()}/>
-                    </PaginationItem>
-                    {currentPage > 2 &&
-                        (
-                            <PaginationItem>
-                                <PaginationEllipsis/>
-                            </PaginationItem>
-                        )
-                    }
-                    {availablePages.map((page) => (
+                    {hasPreviousPage && (
+                        <PaginationItem>
+                            <PaginationPrevious action={() => goToPreviousPage()}/>
+                        </PaginationItem>
+                    )}
+                    {listAvailablePages()[0] > 1 && (
+                        <PaginationItem>
+                            <PaginationEllipsis/>
+                        </PaginationItem>
+                    )}
+                    {listAvailablePages().map((page) => (
                         <PaginationItem>
                             <PaginationLink isActive={page === currentPage} action={() => goToPage(page)}>
                                 {page}
                             </PaginationLink>
                         </PaginationItem>
                     ))}
-                    {currentPage >= totalPages - 1 &&
-                        (
-                            <PaginationItem>
-                                <PaginationEllipsis/>
-                            </PaginationItem>
-                        )
-                    }
-                    <PaginationItem>
-                        <PaginationNext action={() => goToNextPage()}/>
-                    </PaginationItem>
+                    {listAvailablePages()[2] < totalPages && (
+                        <PaginationItem>
+                            <PaginationEllipsis/>
+                        </PaginationItem>
+                    )}
+                    {hasNextPage && (
+                        <PaginationItem>
+                            <PaginationNext action={() => goToNextPage()}/>
+                        </PaginationItem>
+                    )}
                 </PaginationContent>
             </Pagination>
         </div>
