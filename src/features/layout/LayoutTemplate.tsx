@@ -7,7 +7,7 @@ const LayoutTemplate = () => {
     return (
         <div className="page-content">
             <Header/>
-            <main>
+            <main className="main-content">
                 <Outlet/>
             </main>
             <Footer/>
