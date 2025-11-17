@@ -31,8 +31,8 @@ function App() {
                 }/>
                 <Route path="login" element={<LoginPage/>}/>
                 <Route path="about" element={<AboutPage/>}/>
+                <Route path="*" element={<NotFound/>}/>
             </Route>
-            <Route path="*" element={<NotFound/>}/>
         </Routes>
     </BrowserRouter>
   )

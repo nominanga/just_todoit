@@ -77,7 +77,9 @@ const TodoTablePage = () => {
                                     navigate(`todos/${todo.id}`)
                                 }}>
                                     {(isLoading || isFetching) ?
-                                        <Skeleton className="h-2 w-full m-5"/>
+                                        <TableCell>
+                                            <Skeleton className="h-2 w-full m-5"/>
+                                        </TableCell>
                                         :
                                         <>
                                             <TableCell className="flex gap-2 items-center">
