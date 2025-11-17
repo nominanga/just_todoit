@@ -52,4 +52,8 @@ export const todoApi = createApi({
 export const {
     useGetAllTodosQuery,
     useGetTodosPageQuery,
+    useDeleteTodoByIdMutation,
+    useUpdateTodoByIdMutation,
+    useCreateTodoMutation,
+    useGetTodoByIdQuery
 } = todoApi;

@@ -9,5 +9,5 @@
 /*}*/
 
 .main-content {
-    @apply h-dvh flex flex-col gap-5 align-middle lg:w-5xl m-auto;
+    @apply h-dvh flex flex-col gap-5 align-middle lg:w-5xl m-auto md:w-3xl;
 }
