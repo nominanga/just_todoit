@@ -13,6 +13,7 @@ import {Spinner} from "@/components/ui/spinner.tsx";
 import WebError from "@/components/ui/webError.tsx";
 import {Checkbox} from "@/components/ui/checkbox.tsx";
 import {useEffect, useState} from "react";
+import {Skeleton} from "@/components/ui/skeleton.tsx";
 
 
 const TodoPage = () => {
@@ -24,6 +25,7 @@ const TodoPage = () => {
 
     useEffect(() => {
         if (!isLoading && data) {
+            //eslint-ignore
             setChecked(data.completed);
         }
     }, [data, isLoading])
@@ -38,31 +40,50 @@ const TodoPage = () => {
 
             {isError && <WebError>Can't load todo, so you can chill</WebError>}
             <Card>
-                {isLoading && <Spinner/>}
                 <CardHeader>
-                    <CardTitle className="text-4xl">{data?.title}</CardTitle>
-                    <CardAction>
-                        <Checkbox
-                            id={`check${data?.id}`}
-                            checked={checked}
-                            className="cursor-pointer size-6"
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                updateTodo({id: Number(id), body: {completed: !(data?.completed)}})
-                                setChecked(!checked);
-                            }}
-                        />
-                    </CardAction>
+                    {isLoading ?
+                        <Skeleton className="h-8 w-full m-5"/>
+                        :
+                        <>
+                            <CardTitle className="text-4xl">{data?.title}</CardTitle>
+                            <CardAction>
+                                <Checkbox
+                                    id={`check${data?.id}`}
+                                    checked={checked}
+                                    className="cursor-pointer size-6"
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        updateTodo({id: Number(id), body: {completed: !(data?.completed)}})
+                                        setChecked(!checked);
+                                    }}
+                                />
+                            </CardAction>
+                        </>
+                    }
                 </CardHeader>
                 <CardContent>
-                    <CardDescription className="text-md text-dark">
-                        {data?.description}
-                    </CardDescription>
+                    {isLoading
+                        ?
+                        <Skeleton className="h-4 w-full m-5"/>
+                        :
+                        <>
+                            <CardDescription className="text-md text-dark">
+                                {data?.description}
+                            </CardDescription>
+                        </>
+                    }
                 </CardContent>
                 <CardFooter>
-                    <CardDescription>
-                        due to {new Date((data?.createdAt ?? 0) * 1000).toLocaleString()}
-                    </CardDescription>
+                    {isLoading
+                        ?
+                        <Skeleton className="h-2 w-full m-5"/>
+                        :
+                        <>
+                            <CardDescription>
+                                due to {new Date((data?.createdAt ?? 0) * 1000).toLocaleString()}
+                            </CardDescription>
+                        </>
+                    }
                 </CardFooter>
             </Card>
         </div>

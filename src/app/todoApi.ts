@@ -9,8 +9,9 @@ export const todoApi = createApi({
     endpoints: (build) => ({
         getTodoById: build.query<ITodo, number>({
             query: (id: number) => ({
-                url: `todos/${id}`
+                url: `todos/${id}`,
             }),
+            providesTags: ["Todo"],
         }),
         deleteTodoById: build.mutation<ITodo, number>({
             query: (id) => ({

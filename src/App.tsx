@@ -7,6 +7,7 @@ import TodoTablePage from "@/pages/TodoTablePage.tsx";
 import TodoCreationPage from "@/pages/TodoCreationPage.tsx";
 import AboutPage from "@/pages/AboutPage.tsx";
 import ProtectedRoute from "@/utils/ProtectedRoute.tsx";
+import TodoEditPage from "@/pages/TodoEditPage.tsx";
 
 function App() {
 
@@ -31,6 +32,11 @@ function App() {
                 }/>
                 <Route path="login" element={<LoginPage/>}/>
                 <Route path="about" element={<AboutPage/>}/>
+                <Route path="todos/:id/edit" element={
+                    <ProtectedRoute>
+                        <TodoEditPage/>
+                    </ProtectedRoute>
+                }/>
                 <Route path="*" element={<NotFound/>}/>
             </Route>
         </Routes>

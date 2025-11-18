@@ -1,20 +1,27 @@
 import {Card, CardHeader, CardTitle, CardContent, CardFooter} from "@/components/ui/card.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {Textarea} from "@/components/ui/textarea.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Label} from "@radix-ui/react-label";
-import {useCreateTodoMutation} from "@/app/todoApi.ts";
+import {useCreateTodoMutation, useGetTodoByIdQuery, useUpdateTodoByIdMutation} from "@/app/todoApi.ts";
 import {type SubmitHandler, useForm} from "react-hook-form";
 import type {ITodo} from "@/app/types.ts";
 import {useCallback, useEffect} from "react";
 import {toast} from "sonner";
 import {Spinner} from "@/components/ui/spinner.tsx";
 
-const TodoForm = () => {
+interface TemplateProps{
+    type: "create" | "update"
+}
 
+const TodoFormTemplate = ({type}: TemplateProps) => {
     const navigate = useNavigate();
-    const [create, {isSuccess, isLoading}] = useCreateTodoMutation();
+    const [create, {isSuccess: isCreateSuccess, isLoading: isCreateLoading}] = useCreateTodoMutation();
+    const [update, {isSuccess: isUpdateSuccess, isLoading: isUpdateLoading}] = useUpdateTodoByIdMutation();
+
+    const {id} = useParams();
+    const {data: todo} = useGetTodoByIdQuery(Number(id));
 
     const {
         register,
@@ -27,36 +34,55 @@ const TodoForm = () => {
         }
     });
 
-    const submit = useCallback<SubmitHandler<ITodo>>((data) => {
+    const submitCreate = useCallback<SubmitHandler<ITodo>>((data) => {
         data.completed = false;
         data.createdAt = Math.floor(Date.now() / 1000);
 
+        data.title = data.title.length ? data.title : "No title";
         create(data);
     }, [create]);
 
+    const submitUpdate = useCallback<SubmitHandler<ITodo>>((data) => {
+        if (todo === undefined) {
+            return;
+        }
+        const newTitle = (data.title.length > 0) ? data.title : todo?.title;
+        const newDescription = (data.description.length > 0) ? data.description : todo?.description;
+        update({id: Number(id), body: {title: newTitle, description: newDescription}});
+    }, [update, id, todo]);
+
     useEffect(() => {
-        if (!isLoading && isSuccess) {
+        if (!isCreateLoading && isCreateSuccess) {
             toast.success("Todo is created");
             setTimeout(() => navigate("/"), 1000);
         }
-    }, [isLoading, isSuccess, navigate]);
+    }, [isCreateLoading, isCreateSuccess, navigate]);
+
+    useEffect(() => {
+        if (!isUpdateLoading && isUpdateSuccess) {
+            toast.success(`Todo ${id} is updated`);
+            setTimeout(() => navigate("/"), 1000);
+        }
+    }, [isUpdateSuccess, isUpdateLoading, navigate, id]);
 
 
     return (
         <div className="todo-form-container">
             <Card>
                 <CardHeader>
-                    <CardTitle>Create new todo</CardTitle>
+                    <CardTitle>{(type === "create") ? "Create new todo" : `Update todo ${id}`}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <form onSubmit={handleSubmit(submit)} className="grid gap-5" id="create-form">
+                    <form
+                        onSubmit={handleSubmit((type === "create") ? submitCreate : submitUpdate)}
+                        className="grid gap-5" id="create-form"
+                    >
                         <div className="grid gap-2">
-                            <Label htmlFor="title">Title</Label>
+                            <Label htmlFor="title">{type==="create" ? "Title" : "New title"}</Label>
                             <Input
                                 id="title"
                                 type="text"
                                 {...register("title", {
-                                    required: "Title is required",
                                     maxLength: {value: 30, message: "Title length must be under 30 symbols"}
                                 })}
                             />
@@ -65,11 +91,10 @@ const TodoForm = () => {
                             )}
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="description">Description</Label>
+                            <Label htmlFor="description">{type==="create" ? "Description" : "New description"}</Label>
                             <Textarea
                                 id="description"
                                 {...register("description", {
-                                    required: "Description is required",
                                     maxLength: {value: 100, message: "Description length must be under 100 symbols"}
                                 })}
                             />
@@ -85,12 +110,12 @@ const TodoForm = () => {
                             type="submit"
                             className="cursor-pointer"
                             form="create-form"
-                            disabled={isLoading || isSuccess}
+                            disabled={isCreateLoading || isUpdateLoading || isCreateSuccess || isUpdateSuccess}
                         >
-                            {isLoading ?
+                            {isCreateLoading || isUpdateLoading?
                                 <Spinner/>
                                 :
-                                <p>Create</p>
+                                <p>Confirm</p>
                             }
                         </Button>
                         <Button
@@ -107,4 +132,4 @@ const TodoForm = () => {
     );
 };
 
-export default TodoForm;
+export default TodoFormTemplate;

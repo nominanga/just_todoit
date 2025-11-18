@@ -15,6 +15,8 @@ import {Skeleton} from "@/components/ui/skeleton.tsx";
 import {Spinner} from "@/components/ui/spinner.tsx";
 import {useDeleteTodoByIdMutation, useUpdateTodoByIdMutation} from "@/app/todoApi.ts";
 import {useNavigate} from "react-router-dom";
+import {useEffect} from "react";
+import {toast} from "sonner";
 
 const Header = ["Status", "Title", "Created at"];
 
@@ -35,8 +37,7 @@ const TodoTablePage = () => {
     }
         = useTodoPagination(1, 10);
 
-    const [deleteTodo] =
-        useDeleteTodoByIdMutation();
+    const [deleteTodo, {isLoading: isDeletedLoading, isSuccess: isDeletedSuccess}] = useDeleteTodoByIdMutation();
     const [updateTodo] =
         useUpdateTodoByIdMutation();
 
@@ -54,6 +55,12 @@ const TodoTablePage = () => {
         }
         return [currentPage - 1, currentPage, currentPage + 1];
     }
+
+    useEffect(() => {
+        if (!isDeletedLoading && isDeletedSuccess) {
+            toast.success("Todo successfully deleted")
+        }
+    }, [isDeletedLoading, isDeletedSuccess]);
 
     return (
         <div className="flex flex-col items-center gap-4 h-full justify-between">
@@ -99,7 +106,13 @@ const TodoTablePage = () => {
                                                 {new Date(todo.createdAt * 1000).toLocaleString()}
                                             </TableCell>
                                             <TableCell className="flex justify-end items-center gap-3">
-                                                <Button variant="outline">
+                                                <Button
+                                                    variant="outline"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        navigate(`todos/${todo.id}/edit`)
+                                                    }}
+                                                >
                                                     <Pencil className="h-4 w-4"/>
                                                 </Button>
                                                 <Button
