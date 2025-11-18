@@ -9,7 +9,6 @@ import {
     CardHeader,
     CardTitle
 } from "@/components/ui/card.tsx";
-import {Spinner} from "@/components/ui/spinner.tsx";
 import WebError from "@/components/ui/webError.tsx";
 import {Checkbox} from "@/components/ui/checkbox.tsx";
 import {useEffect, useState} from "react";

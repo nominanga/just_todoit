@@ -17,6 +17,7 @@ import {useDeleteTodoByIdMutation, useUpdateTodoByIdMutation} from "@/app/todoAp
 import {useNavigate} from "react-router-dom";
 import {useEffect} from "react";
 import {toast} from "sonner";
+import {useActions} from "@/hooks/actions.ts";
 
 const Header = ["Status", "Title", "Created at"];
 
@@ -36,6 +37,8 @@ const TodoTablePage = () => {
         hasNextPage
     }
         = useTodoPagination(1, 10);
+
+    const {updateTodoList} = useActions();
 
     const [deleteTodo, {isLoading: isDeletedLoading, isSuccess: isDeletedSuccess}] = useDeleteTodoByIdMutation();
     const [updateTodo] =
@@ -61,6 +64,12 @@ const TodoTablePage = () => {
             toast.success("Todo successfully deleted")
         }
     }, [isDeletedLoading, isDeletedSuccess]);
+
+    useEffect(() => {
+        if (!isLoading && !isFetching && todos !== undefined) {
+            updateTodoList(todos);
+        }
+    }, [isLoading, isFetching, todos, updateTodoList])
 
     return (
         <div className="flex flex-col items-center gap-4 h-full justify-between">
