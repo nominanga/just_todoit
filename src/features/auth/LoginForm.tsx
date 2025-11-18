@@ -30,7 +30,7 @@ const LoginForm = () => {
 
     const [isSubmitError, setIsSubmitError] = useState(false);
 
-    const submit: SubmitHandler<AuthCredentials> = async (data) => {
+    const submit: SubmitHandler<AuthCredentials> = (data) => {
         if (data.username === "admin" && data.password === "123") {
             login();
             navigate("/");

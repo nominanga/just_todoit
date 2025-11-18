@@ -2,6 +2,7 @@ import {Outlet} from "react-router-dom";
 import {Header} from "@/features/layout/header.tsx";
 import {Footer} from "@/features/layout/footer.tsx";
 import "./layout.css"
+import {Toaster} from "sonner";
 
 const LayoutTemplate = () => {
     return (
@@ -11,6 +12,7 @@ const LayoutTemplate = () => {
                 <Outlet/>
             </main>
             <Footer/>
+            <Toaster />
         </div>
     );
 };

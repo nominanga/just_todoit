@@ -64,10 +64,10 @@ const TodoTablePage = () => {
             {totalPages > 0 &&
                 <div className="overflow-hidden rounded-xl border shadow-xl w-full">
                     <Table className="table-fixed w-full">
-                        <TableHeader>
-                            <TableRow>
+                        <TableHeader >
+                            <TableRow className="hover:bg-white">
                                 {Header.map((col) => (
-                                    <TableHead  key={col}>{col}</TableHead>
+                                    <TableHead key={col}>{col}</TableHead>
                                 ))}
                             </TableRow>
                         </TableHeader>

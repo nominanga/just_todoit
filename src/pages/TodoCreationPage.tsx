@@ -1,7 +1,11 @@
+import TodoForm from "@/features/createTodo/TodoForm.tsx";
 
 
 const TodoCreationPage = () => {
-    return <div></div>;
+
+    return <>
+        <TodoForm/>
+    </>;
 };
 
 export default TodoCreationPage;

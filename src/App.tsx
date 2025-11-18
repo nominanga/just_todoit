@@ -6,7 +6,7 @@ import TodoPage from "@/pages/TodoPage.tsx";
 import TodoTablePage from "@/pages/TodoTablePage.tsx";
 import TodoCreationPage from "@/pages/TodoCreationPage.tsx";
 import AboutPage from "@/pages/AboutPage.tsx";
-import ProtectedRoute from "@/pages/ProtectedRoute.tsx";
+import ProtectedRoute from "@/utils/ProtectedRoute.tsx";
 
 function App() {
 
