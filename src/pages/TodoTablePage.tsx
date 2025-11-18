@@ -61,7 +61,7 @@ const TodoTablePage = () => {
             {isLoadingTotal && <Spinner/>}
             {(totalPages === 0) && !isLoadingTotal && <h1 className="text-2xl">No tasks created yet</h1>}
             {isError && <h1 className="text-2xl text-red">Server error</h1>}
-            {totalPages > 0 &&
+            {totalPages > 0 && todos.length > 0 &&
                 <div className="overflow-hidden rounded-xl border shadow-xl w-full">
                     <Table className="table-fixed w-full">
                         <TableHeader >

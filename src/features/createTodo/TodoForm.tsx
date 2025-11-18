@@ -7,14 +7,14 @@ import {Label} from "@radix-ui/react-label";
 import {useCreateTodoMutation} from "@/app/todoApi.ts";
 import {type SubmitHandler, useForm} from "react-hook-form";
 import type {ITodo} from "@/app/types.ts";
-import {useCallback, useEffect, useRef} from "react";
+import {useCallback, useEffect} from "react";
 import {toast} from "sonner";
+import {Spinner} from "@/components/ui/spinner.tsx";
 
 const TodoForm = () => {
 
     const navigate = useNavigate();
     const [create, {isSuccess, isLoading}] = useCreateTodoMutation();
-    const toastIdRef = useRef<string | number | null>(null);
 
     const {
         register,
@@ -29,19 +29,13 @@ const TodoForm = () => {
 
     const submit = useCallback<SubmitHandler<ITodo>>((data) => {
         data.completed = false;
-        data.createdAt = Date.now();
+        data.createdAt = Math.floor(Date.now() / 1000);
 
         create(data);
     }, [create]);
 
     useEffect(() => {
-        if (isLoading) {
-            toastIdRef.current = toast.loading("Creating...");
-        }
         if (!isLoading && isSuccess) {
-            if (toastIdRef.current) {
-                toast.dismiss(toastIdRef.current);
-            }
             toast.success("Todo is created");
             setTimeout(() => navigate("/"), 1000);
         }
@@ -91,8 +85,13 @@ const TodoForm = () => {
                             type="submit"
                             className="cursor-pointer"
                             form="create-form"
+                            disabled={isLoading || isSuccess}
                         >
-                            Create
+                            {isLoading ?
+                                <Spinner/>
+                                :
+                                <p>Create</p>
+                            }
                         </Button>
                         <Button
                             variant="outline"
